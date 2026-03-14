@@ -3,7 +3,6 @@ package pl.wsb.fitnesstracker.healthmetrics.internal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.wsb.fitnesstracker.healthmetrics.api.HealthMetricsDto;
-import pl.wsb.fitnesstracker.healthmetrics.api.HealthMetricsDto;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/healthmetricss")
 @RequiredArgsConstructor
-class healthmetricsController {
+class HealthMetricsController {
 
     private final healthmetricsServiceImpl healthmetricsService;
 
@@ -30,10 +29,10 @@ class healthmetricsController {
 
 
     @PostMapping
-    public HealthMetricsDto addhealthmetrics(@RequestBody HealthMetricsDto HealthMetricsDto) throws InterruptedException {
+    public HealthMetricsDto addhealthmetrics(@RequestBody HealthMetricsDto healthmetricsDto) throws InterruptedException {
 
         // TODO: Implement the method to add a new healthmetrics.
-        //  You can use the @RequestBody annotation to map the request body to the HealthMetricsDto object.
+        //  You can use the @RequestBody annotation to map the request body to the healthmetricsDto object.
 
         return null;
     }
