@@ -17,6 +17,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 .findFirst();
     }
 
+    default List<User> findAllByEmailIgnoreCase(String email) {
+        return findAll()
+                .stream()
+                .filter(user -> user.getEmail() != null)
+                .filter(user -> user.getEmail().equalsIgnoreCase(email))
+                .toList();
+    }
+
     default List<User> findByEmailContainingIgnoreCase(String emailFragment) {
         return findAll()
                 .stream()
@@ -25,13 +33,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 .toList();
     }
 
-    default List<User> findOlderThan(int age) {
-        LocalDate borderDate = LocalDate.now().minusYears(age);
-
+    default List<User> findOlderThan(LocalDate date) {
         return findAll()
                 .stream()
                 .filter(user -> user.getBirthdate() != null)
-                .filter(user -> user.getBirthdate().isBefore(borderDate))
+                .filter(user -> user.getBirthdate().isBefore(date))
                 .toList();
+    }
+
+    default List<User> findOlderThan(int age) {
+        LocalDate borderDate = LocalDate.now().minusYears(age);
+
+        return findOlderThan(borderDate);
     }
 }

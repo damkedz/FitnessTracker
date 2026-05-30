@@ -23,7 +23,8 @@ final class UserMapper {
     static UserBasicDto toBasicDto(User user) {
         return new UserBasicDto(
                 user.getId(),
-                user.getFirstName() + " " + user.getLastName()
+                user.getFirstName(),
+                user.getLastName()
         );
     }
 

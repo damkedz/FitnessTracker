@@ -1,6 +1,5 @@
 package pl.wsb.fitnesstracker.user.internal;
 
-
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import pl.wsb.fitnesstracker.user.api.User;
@@ -9,6 +8,7 @@ import pl.wsb.fitnesstracker.user.api.UserDto;
 import pl.wsb.fitnesstracker.user.api.UserEmailDto;
 import pl.wsb.fitnesstracker.user.api.UserService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -22,7 +22,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserBasicDto> findAllUsers() {
+    public List<UserDto> findAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<UserBasicDto> findAllSimpleUsers() {
         return userRepository.findAll()
                 .stream()
                 .map(UserMapper::toBasicDto)
@@ -44,10 +52,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserEmailDto> findUsersByEmail(String email) {
+        return userRepository.findAllByEmailIgnoreCase(email)
+                .stream()
+                .map(UserMapper::toEmailDto)
+                .toList();
+    }
+
+    @Override
     public List<UserEmailDto> findUsersByEmailFragment(String emailFragment) {
         return userRepository.findByEmailContainingIgnoreCase(emailFragment)
                 .stream()
                 .map(UserMapper::toEmailDto)
+                .toList();
+    }
+
+    @Override
+    public List<UserDto> findUsersOlderThan(LocalDate date) {
+        return userRepository.findOlderThan(date)
+                .stream()
+                .map(UserMapper::toDto)
                 .toList();
     }
 

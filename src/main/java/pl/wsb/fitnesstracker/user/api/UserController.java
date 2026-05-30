@@ -1,8 +1,10 @@
 package pl.wsb.fitnesstracker.user.api;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -16,22 +18,22 @@ public class UserController {
     }
 
     @GetMapping
-    List<UserBasicDto> getAllUsers() {
+    List<UserDto> getAllUsers() {
         return userService.findAllUsers();
     }
 
-    @GetMapping("/{id}")
-    UserDto getUserById(@PathVariable Long id) {
-        return userService.findUserById(id);
+    @GetMapping("/simple")
+    List<UserBasicDto> getAllSimpleUsers() {
+        return userService.findAllSimpleUsers();
+    }
+
+    @GetMapping("/email")
+    List<UserEmailDto> getUsersByEmail(@RequestParam String email) {
+        return userService.findUsersByEmail(email);
     }
 
     @GetMapping("/by-email")
     UserDto getUserByEmail(@RequestParam String email) {
-        return userService.findUserByEmail(email);
-    }
-
-    @GetMapping("/email/{email}")
-    UserDto getUserByEmailFromPath(@PathVariable String email) {
         return userService.findUserByEmail(email);
     }
 
@@ -45,9 +47,21 @@ public class UserController {
         return userService.findUsersByEmailFragment(email);
     }
 
+    @GetMapping("/older/{time}")
+    List<UserDto> getUsersOlderThanDate(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate time
+    ) {
+        return userService.findUsersOlderThan(time);
+    }
+
     @GetMapping("/older-than/{age}")
-    List<UserDto> getUsersOlderThan(@PathVariable int age) {
+    List<UserDto> getUsersOlderThanAge(@PathVariable int age) {
         return userService.findUsersOlderThan(age);
+    }
+
+    @GetMapping("/{id}")
+    UserDto getUserById(@PathVariable Long id) {
+        return userService.findUserById(id);
     }
 
     @PostMapping
